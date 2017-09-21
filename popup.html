@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/awsm.css/dist/awsm.min.css">
+    <title>Annoying Popup</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        body {
+            padding: 20px calc(50% - 300px);
+            font-size: 18px;
+        }
+
+        .popup {
+            --scale: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 200px;
+            padding: 10px;
+            background-color: #e2f3f6;
+            border-radius: 5px;
+            border: 2px double black;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(var(--scale));
+            text-align: center;
+        }
+
+        .close-link, .close-link:hover, .close-link:visited {
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            line-height: 1;
+            color: #000;
+            font-size: 40px;
+            text-decoration: none;
+            background: none;
+            box-shadow: none;
+        }
+
+        .popup p {
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Annoying Popup</h1>
+<p>The European languages are members of the same family. Their separate existence is a myth.</p>
+
+<p>For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+
+<p>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.</p>
+
+<p>To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
+
+<p>If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
+
+<p>The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental.</p>
+
+<p>To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family.</p>
+
+<p>Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To</p>
+<script>
+  const el = function() {
+    const tmp = document.createElement('template')
+    tmp.innerHTML = String.raw(...arguments).replace(/>\s+</g,'><')
+    return tmp.content.firstElementChild
+  }
+
+  const popup = el`
+    <div class="popup">
+      <a class="close-link" href="#">×</a>
+      <p>Annoying popup content</p>
+    </div>
+`
+  document.body.append(popup)
+
+  const link = document.querySelector('.close-link')
+  link.addEventListener('click', () => { popup.remove() })
+
+  // create an observer instance
+  var popupScale = 1
+  const textNode = popup.querySelector('p')
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type == 'childList' && mutation.removedNodes.length) {
+        mutation.removedNodes.forEach(node => {
+          if (popupScale == 2.5) {
+            textNode.innerHTML = '💵 💵 💵<br>GIMME YOUR MONEY!!!<br>💵 💵 💵'
+          }
+          if (node === popup) {
+            popupScale += 0.3
+            popup.style.setProperty('--scale', popupScale)
+            document.body.append(popup)
+          }
+        })
+      }
+    })
+  })
+
+  // configuration of the observer:
+  var config = { childList: true, attributes: true, subtree: true }
+
+  // pass in the target node, as well as the observer options
+  observer.observe(document.body, config)
+</script>
+</body>
+</html>

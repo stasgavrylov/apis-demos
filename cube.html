@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.1/web-animations-next.min.js"></script>
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/awsm.css/dist/awsm.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <title>Web Animations API Demo</title>
+    <style>
+html, body, div, ul, li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline
+}
+
+body {
+  padding-left: 300px;
+  line-height: 1;
+  color: #000;
+  background: #fff
+}
+
+ol,ul {
+  list-style: none
+}
+
+button {
+    font-size: 35px;
+}
+
+h1 {
+    text-align: center;
+}
+.controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+pre {
+    display: none;
+    position: fixed;
+    z-index:999;
+    top: 100px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    font-size:40px;
+}
+.show-code:hover + pre {
+    display: initial;
+}
+
+
+@keyframes slowspin {
+  0% {
+    transform: rotateX(-33.5deg) rotateY(45deg)
+  }
+
+  90%,to {
+    transform: rotateX(-33.5deg) rotateY(225deg)
+  }
+}
+
+@keyframes fastspin {
+  0% {
+    transform: rotateX(-33.5deg) rotateY(45deg)
+  }
+
+  90%,to {
+    transform: rotateX(-33.5deg) rotateY(-315deg)
+  }
+}
+
+.logo {
+  /* zoom: 3; */
+  width: 100%;
+  height: 210px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: -50px 0 0 -50px;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50px 50px;
+  transform: rotateX(-33.5deg) rotateY(45deg); /* the rotate operation will change the direction of axises, so the order of transform matters. */
+  transform-style: preserve-3d;  /* make 3d effect working */
+}
+
+.traditional .cube {
+    animation: slowspin 5s ease-in-out infinite 0s;
+}
+
+.cube,.cube li {
+  position: absolute;
+  display: block
+}
+
+/* you can set the border to get a wireframe cube, https://leancloud.cn used it. */
+.cube li {
+  width: 75pt;
+  height: 75pt;
+  transition: transform 1s ease-in-out /* you will see the squares transforms to a cube sometimes, it's cool, you can change .logo's zoom from developer tools to see it. */
+}
+
+.cube .back,.cube .front,.cube .left,.cube .right,.cube .top {
+  background: radial-gradient(transparent 30%,rgba(16,47,91,.2) 100%)
+}
+
+.cube li:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 75pt;
+  height: 75pt;
+  backface-visibility: hidden;
+  background-color: rgba(126,169,232,.5);
+  transition: transform 1s ease-in-out
+}
+
+
+.cube .front {
+  transform: translateZ(50px)
+}
+
+.cube .back {
+  transform: rotateX(-180deg) translateZ(50px)
+}
+
+.cube .right {
+  transform: rotateY(90deg) translateZ(50px)
+}
+
+.cube .left {
+  transform: rotateY(-90deg) translateZ(50px)
+}
+
+.cube .top {
+  transform: rotateX(90deg) translateZ(50px)
+}
+
+.cube .top:after {
+  background-color: rgba(152,186,237,.5)
+}
+
+.cube .bottom {
+  transform: rotateX(-90deg) translateZ(50px)
+}
+
+.cube .floor:after {
+  display: none
+}
+
+.cube .floor {
+  /* cube shadow comes from the following two properties */
+  box-shadow: -300px 0 50px rgba(0,0,0,.3);
+  left: 295px;
+
+  backface-visibility: visible;
+  width: 110px;
+  height: 110px;
+  background-color: transparent;
+  transform: rotateX(-90deg) translateZ(60px) /* translateZ controls the distance between shadow and cube */
+}
+
+.cube-inner {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: -25px 0;
+  top: 50%;
+  left: 50%;
+  transform-origin: 25px 25px;
+  margin: -25px 0 0 -25px;
+  transform: rotateX(-33.5deg) rotateY(45deg);
+  transform-style: preserve-3d;
+}
+
+.traditional .cube-inner {
+    animation: fastspin 5s ease-in-out infinite 0s;
+}
+
+.cube-inner,.cube-inner li {
+  position: absolute;
+  display: block
+}
+
+.cube-inner li {
+  width: 50px;
+  height: 50px;
+  transition: transform 1s ease-in-out
+}
+
+.cube-inner .back,.cube-inner .front,.cube-inner .left,.cube-inner .right,.cube-inner .top {
+  background: radial-gradient(transparent 30%,rgba(5,17,53,.2) 100%)
+}
+
+.cube-inner li:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  backface-visibility: hidden;
+  background-color: rgba(16,58,177,.5);
+  transition: transform 1s ease-in-out
+}
+
+.cube-inner .front {
+  transform: translateZ(25px)
+}
+
+.cube-inner .back {
+  transform: rotateX(-180deg) translateZ(25px)
+}
+
+.cube-inner .right {
+  transform: rotateY(90deg) translateZ(25px)
+}
+
+.cube-inner .left {
+  transform: rotateY(-90deg) translateZ(25px)
+}
+
+.cube-inner .top {
+  transform: rotateX(90deg) translateZ(25px)
+}
+
+.cube-inner .top:after {
+  background-color: rgba(22,78,234,.5)
+}
+
+.cube-inner .bottom {
+  transform: rotateX(-90deg) translateZ(25px)
+}
+
+/* !!useless code, there is no .floor in .cube-inner */
+.cube-inner .floor:after {
+  display: none
+}
+
+.cube-inner .floor {
+  box-shadow: -300px 0 50px rgba(0,0,0,.3);
+  backface-visibility: visible;
+  width: 60px;
+  height: 60px;
+  left: 295px;
+  background-color: transparent;
+  transform: rotateX(-90deg) translateZ(35px)
+}
+
+.showroom {
+    display: flex;
+}
+
+.traditional, .api {
+    height: 100%;
+    flex: 1;
+}
+    </style>
+</head>
+<body>
+<div class="logo">
+    <ul class="cube-inner">
+        <li class="front"></li>
+        <li class="back"></li>
+        <li class="right"></li>
+        <li class="left"></li>
+        <li class="top"></li>
+        <li class="bottom"></li>
+    </ul>
+    <ul class="cube">
+        <li class="front"></li>
+        <li class="back"></li>
+        <li class="left"></li>
+        <li class="right"></li>
+        <li class="top"></li>
+        <li class="bottom"></li>
+        <li class="floor"></li>
+    </ul>
+</div>
+<ul class="controls">
+    <li><button onclick="addCSSCube()">CSS Cube</button></li>
+    <li>
+        <button onclick="addWebAnimationCube()">Web Animation Cube</button>
+        <span class="show-code">[code]</span>
+        <pre><code class="javascript">
+  newCube.animate(fastSpin, options)
+  const [initialAnimation] = firstCube.getAnimations()
+  for (animation of newCube.getAnimations()) {
+    animation.currentTime = initialAnimation.currentTime
+  }
+        </code></pre>
+    </li>
+    <li>
+        <button onclick="reverse()">Reverse</button>
+        <span class="show-code">[code]</span>
+        <pre><code class="javascript">
+  for (each of document.timeline.getAnimations()) {
+    each.reverse()
+  }
+        </code></pre>
+    </li>
+    <li>
+        <button onclick="rotateFast()">Rotate Fast</button>
+        <span class="show-code">[code]</span>
+        <pre><code class="javascript">
+  for (each of document.timeline.getAnimations()) {
+    each.playbackRate = 10;
+  }
+        </code></pre>
+    </li>
+    <li>
+        <button onclick="rotateSlow()">Rotate Slow</button>
+        <span class="show-code">[code]</span>
+        <pre><code class="javascript">
+  for (each of document.timeline.getAnimations()) {
+    each.playbackRate = 0.5;
+  }
+        </code></pre>
+    </li>
+</ul>
+
+
+
+<section class="showroom">
+    <div class="traditional"><h1>CSS</h1></div>
+    <div class="api"><h1>Web Animations</h1></div>
+</section>
+<script>
+    const $ = document.querySelector.bind(document)
+    const cube = $('.logo')
+    const trad = $('.traditional')
+    const webApi = $('.api')
+    cube.style.display = 'none'
+
+    function addCSSCube() {
+      const newCube = cube.cloneNode(true)
+      newCube.style.display = 'block'
+      trad.append(newCube)
+    }
+
+    // Web Animation API settings
+    const slowSpin = [
+      {transform: 'rotateX(-33.5deg) rotateY(45deg)'},
+      {transform: 'rotateX(-33.5deg) rotateY(225deg)', offset: 0.9},
+      {transform: 'rotateX(-33.5deg) rotateY(225deg)'}
+    ]
+
+    const fastSpin = [
+      {transform: 'rotateX(-33.5deg) rotateY(45deg)'},
+      {transform: 'rotateX(-33.5deg) rotateY(-315deg)', offset: 0.9},
+      {transform: 'rotateX(-33.5deg) rotateY(-315deg)'}
+    ]
+
+    const options = {
+      duration: 5000,
+      easing: 'ease-in-out',
+      iterations: Infinity,
+    }
+
+    var firstCubeOuter, firstCubeInner;
+    function addWebAnimationCube() {
+      const newCube = cube.cloneNode(true)
+      const newCubeInner = newCube.querySelector('.cube-inner')
+      const newCubeOuter = newCube.querySelector('.cube')
+      newCube.style.display = 'block'
+      newCubeOuter.animate(slowSpin, options)
+      newCubeInner.animate(fastSpin, options)
+
+      if (!firstCubeOuter) {
+        firstCubeOuter = newCubeOuter
+        firstCubeInner = newCubeInner
+      } else {
+        const [mainOuterAnimation] = firstCubeOuter.getAnimations();
+        for (animation of newCubeOuter.getAnimations()) {
+          animation.currentTime = mainOuterAnimation.currentTime
+          console.log('here')
+        }
+        const [mainInnerAnimation] = firstCubeInner.getAnimations();
+        for (animation of newCubeInner.getAnimations()) {
+          animation.currentTime = mainInnerAnimation.currentTime
+          console.log('here2')
+        }
+      }
+
+      webApi.append(newCube)
+    }
+
+    function reverse() {
+      for (each of document.timeline.getAnimations()) {
+        each.reverse()
+      }
+    }
+
+    function rotateFast() {
+      for (each of document.timeline.getAnimations()) {
+        each.playbackRate = 10;
+      }
+    }
+
+    function rotateSlow() {
+      for (each of document.timeline.getAnimations()) {
+        each.playbackRate = 0.5;
+      }
+    }
+</script>
+</body>
+</html>
