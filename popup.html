@@ -35,6 +35,12 @@
             transform: translate(-50%, -50%) scale(var(--scale));
             text-align: center;
         }
+        .popup.closing {
+          transition: all 500ms;
+            /*top: 100%;*/
+            transform: scale(0.001);
+            transform-origin: 0% 0%;
+        }
 
         .close-link, .close-link:hover, .close-link:visited {
             position: absolute;
@@ -87,7 +93,13 @@
   document.body.append(popup)
 
   const link = document.querySelector('.close-link')
-  link.addEventListener('click', () => { popup.remove() })
+  link.addEventListener('click', () => {
+    popup.classList.add('closing')
+    setTimeout(() => {
+      popup.remove()
+      popup.classList.remove('closing')
+    }, 1000)
+})
 
   // create an observer instance
   var popupScale = 1
@@ -96,6 +108,7 @@
     mutations.forEach(function(mutation) {
       if (mutation.type == 'childList' && mutation.removedNodes.length) {
         mutation.removedNodes.forEach(node => {
+          console.log('Removed nodes: ', node)
           if (popupScale == 2.5) {
             textNode.innerHTML = '💵 💵 💵<br>GIMME YOUR MONEY!!!<br>💵 💵 💵'
           }
