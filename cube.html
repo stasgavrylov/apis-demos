@@ -5,7 +5,6 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.1/web-animations-next.min.js"></script>
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
     <link rel="stylesheet" href="https://unpkg.com/awsm.css/dist/awsm.min.css">
@@ -393,12 +392,10 @@ pre {
         const [mainOuterAnimation] = firstCubeOuter.getAnimations();
         for (animation of newCubeOuter.getAnimations()) {
           animation.currentTime = mainOuterAnimation.currentTime
-          console.log('here')
         }
         const [mainInnerAnimation] = firstCubeInner.getAnimations();
         for (animation of newCubeInner.getAnimations()) {
           animation.currentTime = mainInnerAnimation.currentTime
-          console.log('here2')
         }
       }
 
@@ -406,19 +403,19 @@ pre {
     }
 
     function reverse() {
-      for (each of document.timeline.getAnimations()) {
+      for (each of document.getAnimations()) {
         each.reverse()
       }
     }
 
     function rotateFast() {
-      for (each of document.timeline.getAnimations()) {
+      for (each of document.getAnimations()) {
         each.playbackRate = 10;
       }
     }
 
     function rotateSlow() {
-      for (each of document.timeline.getAnimations()) {
+      for (each of document.getAnimations()) {
         each.playbackRate = 0.5;
       }
     }
