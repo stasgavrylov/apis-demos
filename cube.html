@@ -57,10 +57,15 @@ pre {
     bottom: 100px;
     left: 0;
     right: 0;
+    height: 300px;
     font-size:40px;
+}
+.show-code {
+    z-index: 100;
 }
 .show-code:hover + pre {
     display: initial;
+    pointer-events: none;
 }
 
 
@@ -301,7 +306,7 @@ pre {
     <li>
         <button onclick="addWebAnimationCube()">Web Animation Cube</button>
         <span class="show-code">[code]</span>
-        <pre><code class="javascript">
+        <pre><code class="js">
   newCube.animate(fastSpin, options)
   const [initialAnimation] = firstCube.getAnimations()
   for (animation of newCube.getAnimations()) {
@@ -312,8 +317,8 @@ pre {
     <li>
         <button onclick="reverse()">Reverse</button>
         <span class="show-code">[code]</span>
-        <pre><code class="javascript">
-  for (each of document.timeline.getAnimations()) {
+        <pre><code class="js">
+  for (each of document.getAnimations()) {
     each.reverse()
   }
         </code></pre>
@@ -322,7 +327,7 @@ pre {
         <button onclick="rotateFast()">Rotate Fast</button>
         <span class="show-code">[code]</span>
         <pre><code class="javascript">
-  for (each of document.timeline.getAnimations()) {
+  for (each of document.getAnimations()) {
     each.playbackRate = 10;
   }
         </code></pre>
@@ -331,10 +336,13 @@ pre {
         <button onclick="rotateSlow()">Rotate Slow</button>
         <span class="show-code">[code]</span>
         <pre><code class="javascript">
-  for (each of document.timeline.getAnimations()) {
+  for (each of document.getAnimations()) {
     each.playbackRate = 0.5;
   }
         </code></pre>
+    </li>
+    <li>
+        <button onclick="syncAll()">Sync All</button>
     </li>
 </ul>
 
@@ -404,19 +412,36 @@ pre {
 
     function reverse() {
       for (each of document.getAnimations()) {
-        each.reverse()
+        if (!(each instanceof CSSAnimation)) {
+          each.reverse()
+        }
       }
     }
 
     function rotateFast() {
       for (each of document.getAnimations()) {
-        each.playbackRate = 10;
+        if (!(each instanceof CSSAnimation)) {
+          each.playbackRate = 10
+        }
       }
     }
 
     function rotateSlow() {
       for (each of document.getAnimations()) {
-        each.playbackRate = 0.5;
+        if (!(each instanceof CSSAnimation)) {
+          each.playbackRate = 0.5
+        }
+      }
+    }
+
+    function syncAll() {
+      const [mainOuterAnimation] = firstCubeOuter.getAnimations();
+      const [mainInnerAnimation] = firstCubeInner.getAnimations();
+      for (each of document.getAnimations()) {
+        if (each instanceof CSSAnimation) {
+          each.currentTime = each.animationName == 'slowspin' ? mainOuterAnimation.currentTime : mainInnerAnimation.currentTime
+        }
+        each.playbackRate = 2
       }
     }
 </script>
