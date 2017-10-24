@@ -16,9 +16,11 @@
             flex-direction: column;
             justify-content: center;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            margin-top: 200px;
+            margin-top: 100px;
         }
 
         .hidden {
@@ -36,6 +38,10 @@
         }
         .show-code:hover + pre {
             display: initial;
+        }
+
+        img {
+            width: 100%;
         }
     </style>
 </head>
@@ -59,21 +65,18 @@
     </h1>
     <ul>
         <li class="container">
-            <img src="http://lorempixel.com/1024/768" alt="">
+            <img src="https://images8.alphacoders.com/455/455757.jpg" alt="">
         </li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
-        <li class="container"><img src="" alt="" class="hidden" data-src="http://lorempixel.com/1024/768"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/0F0zDFD.png"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/n61uu8a.jpg"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/0DWar7S.jpg"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/OkR7dvJ.jpg"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/Ho1JVCy.jpg"></li>
+        <li class="container"><img src="" alt="" class="hidden" data-src="https://i.imgur.com/ZmMP0Eh.jpg"></li>
     </ul>
     <script>
         const observer = new IntersectionObserver(changes => {
           if (changes.length == 1) {
-            console.log(changes[0])
             const [{target}] = changes
             target.src = target.dataset.src
             target.classList.remove('hidden')
