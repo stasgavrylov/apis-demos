@@ -84,12 +84,13 @@
 
     function addContent(li) {
         const itemBody = document.importNode(tmpl.content, true)
+        li.innerHTML = ''
         li.append(itemBody)
         li.querySelector('a').innerText = li.dataset.id
     }
 
     function clearItem(li) {
-      if (li.firstElementChild) li.firstElementChild.remove()
+      li.innerHTML = ''
     }
 
     const root = $('ul')
@@ -101,7 +102,7 @@
           clearItem(change.target)
         }
       }
-    }, { root, rootMargin: '40px 0px'})
+    }, { root })
     $$('li').forEach(li => o.observe(li))
 </script>
 </body>
